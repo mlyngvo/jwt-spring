@@ -12,7 +12,7 @@ class JwtRefreshTokenStore(
     fun findEmailByToken(token: String) =
         jwtRefreshTokenRepository.findOneByToken(token)
             .map { it.email }
-            ?:throw EntityNotFoundException()
+            .orElseThrow { EntityNotFoundException() }
 
     fun save(token: String, user: UserDetails) {
         jwtRefreshTokenRepository.save(JwtRefreshTokenEntity(
