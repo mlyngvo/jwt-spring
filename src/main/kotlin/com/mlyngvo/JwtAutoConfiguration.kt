@@ -10,9 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties(JwtProperties::class)
-open class AutoConfiguration {
+class JwtAutoConfiguration {
 
     @Bean
-    open fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager =
+    fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager =
         config.authenticationManager
 }

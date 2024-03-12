@@ -35,8 +35,6 @@ publishing {
     }
 }
 
-
-
 group = "com.mlyngvo"
 
 tasks.getByName<BootJar>("bootJar") {
