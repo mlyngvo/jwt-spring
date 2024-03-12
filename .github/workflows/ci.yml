@@ -2,7 +2,7 @@ name: Build and upload package to GitHub Packages (on release)
 on: [push, pull_request]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
