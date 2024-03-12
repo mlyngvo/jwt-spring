@@ -11,6 +11,7 @@ sealed interface JwtRefreshTokenRepository : JpaRepository<JwtRefreshTokenEntity
 
     fun findByEmail(email: String): JwtRefreshTokenEntity?
 
-    @Modifying
-    fun deleteByToken(token: String)
+    @Modifying(flushAutomatically = true)
+    @Query("delete from JwtRefreshTokenEntity where token = :token")
+    fun deleteByToken(@Param("token") token: String)
 }
