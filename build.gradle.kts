@@ -4,7 +4,6 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 plugins {
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
-    id("java-library")
     id("maven-publish")
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
@@ -14,6 +13,11 @@ plugins {
 repositories {
     mavenCentral()
 }
+
+val sourcesJar by tasks.registering(Jar::class) {
+    from(sourceSets.main.get().allSource)
+}
+
 
 publishing {
     repositories {
@@ -26,7 +30,15 @@ publishing {
             }
         }
     }
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+            artifact(sourcesJar.get())
+        }
+    }
 }
+
+
 
 group = "com.mlyngvo"
 version = "1.0"
