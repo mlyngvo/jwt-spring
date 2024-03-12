@@ -58,7 +58,6 @@ tasks.withType<Test> {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
 
     api("org.springframework.boot:spring-boot-starter-web")
     api("org.springframework.boot:spring-boot-starter-data-jpa")

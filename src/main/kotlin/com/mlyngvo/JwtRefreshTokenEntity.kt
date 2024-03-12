@@ -14,4 +14,8 @@ class JwtRefreshTokenEntity(
     var email: String,
 
     @Column(columnDefinition = "TEXT") var token: String
-)
+) {
+    companion object {
+        val MIGRATION = JwtRefreshTokenMigration()
+    }
+}
