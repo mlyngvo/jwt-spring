@@ -22,7 +22,7 @@ val sourcesJar by tasks.registering(Jar::class) {
 publishing {
     repositories {
         maven {
-            name = "jwt-spring"
+            name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/mlyngvo/jwt-spring")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
@@ -41,7 +41,6 @@ publishing {
 
 
 group = "com.mlyngvo"
-version = "1.0"
 
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
