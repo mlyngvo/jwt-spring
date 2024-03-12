@@ -14,11 +14,6 @@ repositories {
     mavenCentral()
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
-    from(sourceSets.main.get().allSource)
-}
-
-
 publishing {
     repositories {
         maven {
@@ -31,9 +26,11 @@ publishing {
         }
     }
     publications {
-        register("mavenJava", MavenPublication::class) {
+        create<MavenPublication>("maven") {
+            groupId = "com.mlyngvo"
+            artifactId = "jwt-spring"
+
             from(components["java"])
-            artifact(sourcesJar.get())
         }
     }
 }
