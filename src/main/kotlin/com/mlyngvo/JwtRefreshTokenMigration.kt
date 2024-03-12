@@ -10,13 +10,12 @@ class JwtRefreshTokenMigration : JavaMigration {
         """
                 create table jwt_refresh_token
                 (
-                    id bigint(9) unsigned not null auto_increment primary key,
-                    token text not null,
-                    email varchar(255) not null
+                    token text not null primary key,
+                    email varchar(255) not null,
+                    expired_at datetime not null
                 )
             """.trimIndent(),
-        "create index I_jrt_token on jwt_refresh_token (token)",
-        "create unique index I_jrt_email on jwt_refresh_token (email)",
+        "create unique index I_jrt_token on jwt_refresh_token (token)",
     )
 
     override fun getVersion() =
