@@ -13,15 +13,21 @@ class JwtRefreshTokenStore(
     private val jwtRefreshTokenRepository: JwtRefreshTokenRepository
 ) {
 
-    fun findEmailByToken(token: String) =
-        jwtRefreshTokenRepository.findOneByToken(token)
-            .map { it.email }
-            .orElseThrow { EntityNotFoundException() }
+    fun findEmailByToken(token: String): String =
+        jwtRefreshTokenRepository.findByToken(token)
+            ?.email
+            ?: throw EntityNotFoundException()
 
-    fun save(token: String, user: UserDetails) {
-        jwtRefreshTokenRepository.save(JwtRefreshTokenEntity(
-            token = token,
-            email = user.username
-        ))
+    fun save(token: String, email: String) {
+        val entity = jwtRefreshTokenRepository.findByEmail(email)
+            ?.let {
+                it.token = token
+                it
+            }
+            ?: JwtRefreshTokenEntity(
+                token = token,
+                email = email
+            )
+        jwtRefreshTokenRepository.save(entity)
     }
 }
