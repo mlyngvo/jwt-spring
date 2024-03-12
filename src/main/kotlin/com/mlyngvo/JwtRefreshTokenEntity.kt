@@ -7,10 +7,12 @@ import java.time.Instant
 @Table(name = "jwt_refresh_token")
 class JwtRefreshTokenEntity(
     @Id
-    @Column(columnDefinition = "TEXT")
-    var token: String,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0L,
 
     var email: String,
+
+    @Column(columnDefinition = "TEXT") var token: String,
 
     var expiredAt: Instant,
 ) {

@@ -28,6 +28,6 @@ class JwtRefreshTokenStore(
     }
 
     fun delete(token: String) {
-        jwtRefreshTokenRepository.deleteById(token)
+        jwtRefreshTokenRepository.deleteByToken(token)
     }
 }

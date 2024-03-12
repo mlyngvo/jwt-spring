@@ -10,7 +10,8 @@ class JwtRefreshTokenMigration : JavaMigration {
         """
                 create table jwt_refresh_token
                 (
-                    token text not null primary key,
+                    id bigint(9) unsigned not null auto_increment primary key,
+                    token text not null,
                     email varchar(255) not null,
                     expired_at datetime not null
                 )
