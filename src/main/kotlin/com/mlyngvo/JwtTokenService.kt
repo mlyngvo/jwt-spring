@@ -47,6 +47,10 @@ class JwtTokenService(
         getAllClaims(token)
             .subject
 
+    fun extractExpiration(token: String): Date? =
+        getAllClaims(token)
+            .expiration
+
     private fun getAllClaims(token: String): Claims {
         val parser = Jwts.parser()
             .verifyWith(secretKey)
