@@ -14,22 +14,9 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
+    private var userDetailsService: UserDetailsService,
     private val tokenService: JwtTokenService,
 ): OncePerRequestFilter() {
-
-    private var userDetailsService: UserDetailsService? = null
-
-    private fun getUserDetailsService(): UserDetailsService {
-        if (userDetailsService == null) {
-            throw RuntimeException("UserDetailsService not yet initialized. Please call setUserDetailsService() to set it.")
-        }
-        return userDetailsService!!
-    }
-
-
-    fun setUserDetailsService(service: UserDetailsService) {
-        userDetailsService = service
-    }
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -43,7 +30,7 @@ class JwtAuthenticationFilter(
             val email = tokenService.extractEmail(token)
 
             if (email != null && SecurityContextHolder.getContext().authentication == null) {
-                val user = getUserDetailsService().loadUserByUsername(email)
+                val user = userDetailsService.loadUserByUsername(email)
 
                 if (tokenService.isValid(token, user)) {
                     updateContext(user, request)
