@@ -3,6 +3,7 @@ package com.mlyngvo
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -23,18 +24,24 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        val logger = LoggerFactory.getLogger(this::class.java)
+
         val authHeader: String? = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader.hasBearerToken()) {
-            val token = authHeader!!.extractToken()
-            val email = tokenService.extractEmail(token)
+            try {
+                val token = authHeader!!.extractToken()
+                val email = tokenService.extractEmail(token)
 
-            if (email != null && SecurityContextHolder.getContext().authentication == null) {
-                val user = userDetailsService.loadUserByUsername(email)
+                if (email != null && SecurityContextHolder.getContext().authentication == null) {
+                    val user = userDetailsService.loadUserByUsername(email)
 
-                if (tokenService.isValid(token, user)) {
-                    updateContext(user, request)
+                    if (tokenService.isValid(token, user)) {
+                        updateContext(user, request)
+                    }
                 }
+            } catch (ex: Exception) {
+                logger.error("Failed to extract token", ex)
             }
         }
 
