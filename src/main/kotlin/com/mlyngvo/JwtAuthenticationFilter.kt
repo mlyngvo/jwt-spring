@@ -41,7 +41,8 @@ class JwtAuthenticationFilter(
                     }
                 }
             } catch (ex: Exception) {
-                logger.error("Failed to extract token", ex)
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid auth token.")
+                return
             }
         }
 
