@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.security.Key
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -17,7 +16,6 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.time.Instant
 import java.util.*
-import java.util.function.Function
 
 
 @Service
@@ -68,7 +66,7 @@ class JwtTokenService {
         getAllClaims(token)
             .expiration
 
-    private fun <K : Key?> loadKey(stream: InputStream, parser: Function<ByteArray, K>): K {
+    private fun loadKey(stream: InputStream): ByteArray {
         BufferedReader(InputStreamReader(stream)).use { reader ->
             var line: String
             val content = StringBuilder()
@@ -77,8 +75,7 @@ class JwtTokenService {
                     content.append(line).append("\n")
                 }
             }
-            val encoded = Base64.getDecoder().decode(content.toString())
-            return parser.apply(encoded)
+            return Base64.getDecoder().decode(content.toString())
         }
     }
 
@@ -86,20 +83,18 @@ class JwtTokenService {
         val res = prvKeyResource
             ?: throw RuntimeException("Private key resources not set")
         val factory = KeyFactory.getInstance("RSA")
-        return loadKey(res.inputStream) { bytes ->
-            val spec = PKCS8EncodedKeySpec(bytes)
-            return@loadKey factory.generatePrivate(spec)
-        }
+        val bytes = loadKey(res.inputStream)
+        val spec = PKCS8EncodedKeySpec(bytes)
+        return factory.generatePrivate(spec)
     }
 
     private fun loadPublicKey(): PublicKey {
         val res = pubKeyResource
             ?: throw RuntimeException("Public key resources not set")
         val factory = KeyFactory.getInstance("RSA")
-        return loadKey(res.inputStream) { bytes ->
-            val spec = X509EncodedKeySpec(bytes)
-            return@loadKey factory.generatePublic(spec)
-        }
+        val bytes = loadKey(res.inputStream)
+        val spec = X509EncodedKeySpec(bytes)
+        return factory.generatePublic(spec)
     }
 
     private fun getAllClaims(token: String): Claims {
