@@ -22,12 +22,18 @@ import java.util.function.Function
 
 @Service
 @EnableConfigurationProperties
-class JwtTokenService(
-    jwtProperties: JwtProperties
-) {
+class JwtTokenService {
 
-    private val pubKeyPath = jwtProperties.publicKeyPath
-    private val prvKeyPath = jwtProperties.privateKeyPath
+    private var pubKeyResource: ClassPathResource? = null
+    private var prvKeyResource: ClassPathResource? = null
+
+    fun setPubKey(res: ClassPathResource) {
+        pubKeyResource = res
+    }
+
+    fun setPrvKey(res: ClassPathResource) {
+        prvKeyResource = res
+    }
 
     fun generate(
         userDetails: UserDetails,
@@ -77,7 +83,8 @@ class JwtTokenService(
     }
 
     private fun loadPrivateKey(): PrivateKey {
-        val res = ClassPathResource(prvKeyPath)
+        val res = prvKeyResource
+            ?: throw RuntimeException("Private key resources not set")
         val factory = KeyFactory.getInstance("RSA")
         return loadKey(res.inputStream) { bytes ->
             val spec = PKCS8EncodedKeySpec(bytes)
@@ -86,7 +93,8 @@ class JwtTokenService(
     }
 
     private fun loadPublicKey(): PublicKey {
-        val res = ClassPathResource(pubKeyPath)
+        val res = pubKeyResource
+            ?: throw RuntimeException("Public key resources not set")
         val factory = KeyFactory.getInstance("RSA")
         return loadKey(res.inputStream) { bytes ->
             val spec = X509EncodedKeySpec(bytes)
