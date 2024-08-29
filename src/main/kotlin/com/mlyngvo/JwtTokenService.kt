@@ -66,7 +66,7 @@ class JwtTokenService {
         getAllClaims(token)
             .expiration
 
-    private fun loadKey(stream: InputStream): ByteArray {
+    fun loadKey(stream: InputStream): ByteArray {
         BufferedReader(InputStreamReader(stream)).use { reader ->
             var line: String
             val content = StringBuilder()
