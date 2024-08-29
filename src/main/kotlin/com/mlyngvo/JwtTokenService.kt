@@ -20,18 +20,12 @@ import java.util.*
 
 @Service
 @EnableConfigurationProperties
-class JwtTokenService {
+class JwtTokenService(
+    jwtProperties: JwtProperties
+) {
 
-    private var pubKeyResource: ClassPathResource? = null
-    private var prvKeyResource: ClassPathResource? = null
-
-    fun setPubKey(res: ClassPathResource) {
-        pubKeyResource = res
-    }
-
-    fun setPrvKey(res: ClassPathResource) {
-        prvKeyResource = res
-    }
+    private val pubKeyPath = jwtProperties.publicKeyPath
+    private val prvKeyPath = jwtProperties.privateKeyPath
 
     fun generate(
         userDetails: UserDetails,
@@ -66,34 +60,30 @@ class JwtTokenService {
         getAllClaims(token)
             .expiration
 
-    fun loadKey(stream: InputStream): ByteArray {
-        BufferedReader(InputStreamReader(stream)).use { reader ->
-            var line: String
-            val content = StringBuilder()
-            while ((reader.readLine().also { line = it }) != null) {
-                if (!(line.contains("BEGIN") || line.contains("END"))) {
-                    content.append(line).append("\n")
-                }
+    private fun loadKey(stream: InputStream): ByteArray {
+        val reader = BufferedReader(InputStreamReader(stream))
+        val content = StringBuilder()
+        while (true) {
+            val line: String? = reader.readLine()
+            if (line == null) break
+            else if (!(line.contains("BEGIN") || line.contains("END"))) {
+                content.append(line).append("\n")
             }
-            return Base64.getDecoder().decode(content.toString())
         }
+        return Base64.getDecoder().decode(content.toString())
     }
 
     private fun loadPrivateKey(): PrivateKey {
-        val res = prvKeyResource
-            ?: throw RuntimeException("Private key resources not set")
+        val res = ClassPathResource(prvKeyPath)
         val factory = KeyFactory.getInstance("RSA")
-        val bytes = loadKey(res.inputStream)
-        val spec = PKCS8EncodedKeySpec(bytes)
+        val spec = PKCS8EncodedKeySpec(loadKey(res.inputStream))
         return factory.generatePrivate(spec)
     }
 
     private fun loadPublicKey(): PublicKey {
-        val res = pubKeyResource
-            ?: throw RuntimeException("Public key resources not set")
+        val res = ClassPathResource(pubKeyPath)
         val factory = KeyFactory.getInstance("RSA")
-        val bytes = loadKey(res.inputStream)
-        val spec = X509EncodedKeySpec(bytes)
+        val spec = X509EncodedKeySpec(loadKey(res.inputStream))
         return factory.generatePublic(spec)
     }
 

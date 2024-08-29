@@ -18,5 +18,7 @@ spring:
     enabled: true
 
 jwt:
+  public-key-path: "keys/public_key.pem"
+  private-key-path: "keys/private_key.pem"
   access-token-exp: 86400000
   refresh-token-exp: 604800000
