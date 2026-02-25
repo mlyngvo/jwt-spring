@@ -20,9 +20,6 @@ repositories {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.mlyngvo"
-            artifactId = "jwt-spring"
-
             from(components["java"])
         }
     }
