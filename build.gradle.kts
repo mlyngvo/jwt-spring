@@ -20,7 +20,7 @@ repositories {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "dev.mlyngvo"
+            groupId = "com.mlyngvo"
             artifactId = "jwt-spring"
 
             from(components["java"])
@@ -28,7 +28,7 @@ publishing {
     }
 }
 
-group = "dev.mlyngvo"
+group = "com.mlyngvo"
 
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
