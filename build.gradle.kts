@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 plugins {
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
@@ -9,9 +6,9 @@ plugins {
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
     kotlin("plugin.jpa") version "1.9.22"
-
-    `maven-publish`
 }
+
+group = "com.mlyngvo"
 
 repositories {
     mavenCentral()
@@ -25,25 +22,8 @@ publishing {
     }
 }
 
-group = "com.mlyngvo"
-
-tasks.getByName<BootJar>("bootJar") {
-    enabled = false
-}
-
-tasks.getByName<Jar>("jar") {
-    enabled = true
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "17"
-        freeCompilerArgs += "-Xjsr305=strict"
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks.named<Jar>("jar") {
+    archiveClassifier.set("")   // remove -plain
 }
 
 dependencies {
