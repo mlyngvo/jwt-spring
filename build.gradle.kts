@@ -5,9 +5,12 @@ plugins {
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
     id("maven-publish")
+
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
     kotlin("plugin.jpa") version "1.9.22"
+
+    `maven-publish`
 }
 
 repositories {
@@ -15,19 +18,9 @@ repositories {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/mlyngvo/jwt-spring")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.mlyngvo"
+            groupId = "dev.mlyngvo"
             artifactId = "jwt-spring"
 
             from(components["java"])
@@ -35,7 +28,7 @@ publishing {
     }
 }
 
-group = "com.mlyngvo"
+group = "dev.mlyngvo"
 
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
