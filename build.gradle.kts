@@ -1,29 +1,54 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
-    id("org.springframework.boot") version "3.2.3"
-    id("io.spring.dependency-management") version "1.1.4"
+    id("org.springframework.boot") version "3.5.11"
+    id("io.spring.dependency-management") version "1.1.7"
     id("maven-publish")
 
-    kotlin("jvm") version "1.9.22"
-    kotlin("plugin.spring") version "1.9.22"
-    kotlin("plugin.jpa") version "1.9.22"
-}
+    kotlin("jvm") version "2.2.0"
+    kotlin("plugin.spring") version "2.2.0"
+    kotlin("plugin.jpa") version "2.2.0"
 
-group = "com.mlyngvo"
-
-repositories {
-    mavenCentral()
+    `maven-publish`
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
+            groupId = "com.mlyngvo"
+            artifactId = "jwt-spring"
+
             from(components["java"])
         }
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
+tasks.getByName<BootJar>("bootJar") {
+    enabled = false
+}
+
+tasks.getByName<Jar>("jar") {
+    enabled = true
+}
+
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        freeCompilerArgs.add("-Xjsr305=strict")
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 tasks.named<Jar>("jar") {
-    archiveClassifier.set("")   // remove -plain
+    archiveClassifier.set("")   // remove
 }
 
 dependencies {

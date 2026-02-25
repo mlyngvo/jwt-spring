@@ -2,7 +2,6 @@ package com.mlyngvo
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import org.apache.tomcat.util.codec.binary.Base64
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.core.io.ClassPathResource
 import org.springframework.security.core.userdetails.UserDetails
@@ -71,7 +70,7 @@ class JwtTokenService(
                 content.append(line).append("\n")
             }
         }
-        return Base64.decodeBase64(content.toString())
+        return java.util.Base64.getMimeDecoder().decode(content.toString())
     }
 
     private fun loadPrivateKey(): PrivateKey {
