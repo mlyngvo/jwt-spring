@@ -70,7 +70,7 @@ class JwtTokenService(
                 content.append(line).append("\n")
             }
         }
-        return java.util.Base64.getMimeDecoder().decode(content.toString())
+        return Base64.getMimeDecoder().decode(content.toString())
     }
 
     private fun loadPrivateKey(): PrivateKey {

@@ -4,6 +4,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 plugins {
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
+    id("maven-publish")
 
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
@@ -15,9 +16,6 @@ plugins {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.mlyngvo"
-            artifactId = "jwt-spring"
-
             from(components["java"])
         }
     }
@@ -36,9 +34,9 @@ tasks.getByName<Jar>("jar") {
 }
 
 tasks.withType<KotlinCompile> {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-        freeCompilerArgs.add("-Xjsr305=strict")
+    kotlinOptions {
+        jvmTarget = "17"
+        freeCompilerArgs += "-Xjsr305=strict"
     }
 }
 
