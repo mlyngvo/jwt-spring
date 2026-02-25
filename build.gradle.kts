@@ -21,6 +21,8 @@ publishing {
     }
 }
 
+group = "com.mlyngvo"
+
 repositories {
     mavenCentral()
 }
