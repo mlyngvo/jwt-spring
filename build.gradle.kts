@@ -6,11 +6,9 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("maven-publish")
 
-    kotlin("jvm") version "2.2.0"
-    kotlin("plugin.spring") version "2.2.0"
-    kotlin("plugin.jpa") version "2.2.0"
-
-    `maven-publish`
+    kotlin("jvm") version "1.9.22"
+    kotlin("plugin.spring") version "1.9.22"
+    kotlin("plugin.jpa") version "1.9.22"
 }
 
 publishing {
@@ -48,7 +46,7 @@ tasks.withType<Test> {
 }
 
 tasks.named<Jar>("jar") {
-    archiveClassifier.set("")   // remove
+    archiveClassifier.set("")   // remove -plain
 }
 
 dependencies {
