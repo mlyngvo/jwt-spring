@@ -13,7 +13,7 @@ class Application {
     class CustomUserService : UserDetailsService {
 
         override fun loadUserByUsername(username: String?): UserDetails {
-            TODO("Not yet implemented")
+            TODO("Not implemented. This is just a placeholder for the test to pass.")
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.mlyngvo
 
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.core.io.ClassPathResource
@@ -92,8 +93,10 @@ class JwtTokenService(
             .verifyWith(loadPublicKey())
             .decryptWith(loadPrivateKey())
             .build()
-        return parser
-            .parseSignedClaims(token)
-            .payload
+        return try {
+            parser.parseSignedClaims(token).payload
+        } catch (e: ExpiredJwtException) {
+            e.claims
+        }
     }
 }
