@@ -1,13 +1,13 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    id("org.springframework.boot") version "3.2.3"
-    id("io.spring.dependency-management") version "1.1.4"
+    id("org.springframework.boot") version "4.0.10"
+    id("io.spring.dependency-management") version "1.1.7"
 
-    kotlin("jvm") version "1.9.22"
-    kotlin("plugin.spring") version "1.9.22"
-    kotlin("plugin.jpa") version "1.9.22"
+    kotlin("jvm") version "2.2.21"
+    kotlin("plugin.spring") version "2.2.21"
+    kotlin("plugin.jpa") version "2.2.21"
 
     `maven-publish`
     signing
@@ -82,47 +82,40 @@ repositories {
     mavenCentral()
 }
 
-tasks.getByName<BootJar>("bootJar") {
+tasks.named<BootJar>("bootJar") {
     enabled = false
 }
 
-tasks.getByName<Jar>("jar") {
+tasks.named<Jar>("jar") {
     enabled = true
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "17"
-        freeCompilerArgs += "-Xjsr305=strict"
-    }
+    archiveClassifier.set("")   // remove -plain
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.named<Jar>("jar") {
-    archiveClassifier.set("")   // remove -plain
-}
-
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
-    api("org.springframework.boot:spring-boot-starter-web")
+    api("org.springframework.boot:spring-boot-starter-webmvc")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     api("org.springframework.boot:spring-boot-starter-security")
-    api("io.jsonwebtoken:jjwt-api:0.12.5")
-    api("org.flywaydb:flyway-core")
+    api("org.springframework.boot:spring-boot-starter-flyway")
+    api("io.jsonwebtoken:jjwt-api:0.13.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly("org.flywaydb:flyway-mysql")
     testRuntimeOnly("com.h2database:h2")
-    testRuntimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
-    testRuntimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
+    testRuntimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
+    testRuntimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+        freeCompilerArgs.addAll("-Xjsr305=strict")
+    }
 }

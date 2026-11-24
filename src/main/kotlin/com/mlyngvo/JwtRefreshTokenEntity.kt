@@ -14,6 +14,7 @@ class JwtRefreshTokenEntity(
 
     @Column(columnDefinition = "TEXT") var token: String,
 
+    @Column(name = "expired_at")
     var expiredAt: Instant,
 ) {
     companion object {

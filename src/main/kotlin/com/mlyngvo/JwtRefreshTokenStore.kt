@@ -1,9 +1,8 @@
 package com.mlyngvo
 
 import jakarta.persistence.EntityNotFoundException
-import org.springframework.boot.autoconfigure.domain.EntityScan
+import org.springframework.boot.persistence.autoconfigure.EntityScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.time.Instant
 
