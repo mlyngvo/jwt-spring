@@ -1,8 +1,16 @@
 name: Release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - '[0-9]*'
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g. 1.0.3)'
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -26,7 +34,11 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_signingInMemoryKey }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.ORG_GRADLE_PROJECT_signingInMemoryKeyPassword }}
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          if [ -n "${{ inputs.version }}" ]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
           ./gradlew publishAllPublicationsToStagingRepository -Pversion="$VERSION"
 
       - name: Upload bundle to Maven Central
