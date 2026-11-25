@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 LOG_PREFIX="[SH >]"
 
@@ -11,13 +12,13 @@ fi
 
 echo
 
-echo "${LOG_PREFIX} Checking github auth status..."
-gh auth status
+echo "${LOG_PREFIX} Fetching tags..."
+git fetch --tags
 
 echo
 
-echo "${LOG_PREFIX} Getting latest release..."
-TAG=$(gh release list --json tagName,isLatest --jq ".[] | select( .isLatest == true) | .tagName")
+echo "${LOG_PREFIX} Getting latest version tag..."
+TAG=$(git tag --sort=-v:refname | head -n 1)
 echo "${TAG}"
 
 echo
@@ -28,7 +29,7 @@ echo "${RELEASE}"
 
 echo
 
-read -p "${LOG_PREFIX} Are you sure you want to create this release (${RELEASE})? (yYN) " -n 1 -r
+read -p "${LOG_PREFIX} Are you sure you want to tag and release (${RELEASE}) to Maven Central? (y/N) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
@@ -38,5 +39,6 @@ fi
 
 echo
 
-echo "${LOG_PREFIX} Creating new release in github..."
-gh release create "${RELEASE}" --generate-notes
+echo "${LOG_PREFIX} Creating and pushing git tag ${RELEASE}..."
+git tag "${RELEASE}"
+git push origin "${RELEASE}"
