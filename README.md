@@ -13,8 +13,8 @@ A Spring Boot auto-configuration library that adds JWT-based authentication to a
 
 ## Requirements
 
-- Java 17+
-- Spring Boot 3.x
+- Java 21+
+- Spring Boot 4.x
 - A relational database (MySQL / MariaDB in production, H2 supported for tests)
 
 ## Installation
@@ -30,8 +30,8 @@ repositories {
 
 dependencies {
     implementation("dev.mlyngvo:jwt-spring:<version>")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
 }
 ```
 

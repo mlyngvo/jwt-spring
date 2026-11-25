@@ -12,7 +12,7 @@ class Application {
     @Configuration
     class CustomUserService : UserDetailsService {
 
-        override fun loadUserByUsername(username: String?): UserDetails {
+        override fun loadUserByUsername(username: String): UserDetails {
             TODO("Not implemented. This is just a placeholder for the test to pass.")
         }
     }

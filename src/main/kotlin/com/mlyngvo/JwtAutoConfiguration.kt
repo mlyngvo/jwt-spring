@@ -2,7 +2,7 @@ package com.mlyngvo
 
 import org.flywaydb.core.api.configuration.FluentConfiguration
 import org.springframework.boot.autoconfigure.AutoConfiguration
-import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer
+import org.springframework.boot.flyway.autoconfigure.FlywayConfigurationCustomizer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -23,10 +23,9 @@ class JwtAutoConfiguration {
     @Configuration
     class CustomFlywayConfiguration : FlywayConfigurationCustomizer {
 
-        override fun customize(configuration: FluentConfiguration?) {
+        override fun customize(configuration: FluentConfiguration) {
             configuration
-                ?.javaMigrations(*arrayOf(*configuration.javaMigrations, JwtRefreshTokenEntity.MIGRATION))
-
+                .javaMigrations(*arrayOf(*configuration.javaMigrations, JwtRefreshTokenEntity.MIGRATION))
         }
     }
 }
