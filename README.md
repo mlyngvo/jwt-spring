@@ -19,17 +19,17 @@ A Spring Boot auto-configuration library that adds JWT-based authentication to a
 
 ## Installation
 
-The library is distributed via [JitPack](https://jitpack.io).
+The library is published to [Maven Central](https://central.sonatype.com/artifact/dev.mlyngvo/jwt-spring).
 
 ### Gradle (Kotlin DSL)
 
 ```kotlin
 repositories {
-    maven("https://jitpack.io")
+    mavenCentral()
 }
 
 dependencies {
-    implementation("com.github.mlyngvo:jwt-spring:<version>")
+    implementation("dev.mlyngvo:jwt-spring:<version>")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
 }
@@ -38,15 +38,8 @@ dependencies {
 ### Maven
 
 ```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-
 <dependency>
-    <groupId>com.github.mlyngvo</groupId>
+    <groupId>dev.mlyngvo</groupId>
     <artifactId>jwt-spring</artifactId>
     <version>VERSION</version>
 </dependency>
